@@ -1,0 +1,115 @@
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+  <div>
+    <h1 class="h3 fw-bold mb-1">Students</h1>
+    <p class="text-secondary mb-0">{{ totalCount() }} record(s)</p>
+  </div>
+  <a routerLink="/students/new" class="btn btn-primary">
+    <i class="bi bi-plus-lg me-1"></i> Add Student
+  </a>
+</div>
+
+<div class="card border-0 shadow-sm">
+  <div class="card-body">
+    <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
+      <div class="position-relative flex-grow-1" style="max-width: 360px;">
+        <i class="bi bi-search position-absolute" style="top: 50%; left: 0.85rem; transform: translateY(-50%); color: #94a3b8;"></i>
+        <input
+          type="text"
+          class="form-control ps-5"
+          placeholder="Search by name, email or course..."
+          [formControl]="searchControl" />
+      </div>
+      <div class="ms-auto d-flex align-items-center gap-2">
+        <label class="text-secondary small mb-0">Page size</label>
+        <select class="form-select form-select-sm" style="width: auto;"
+                [value]="pageSize()" (change)="setPageSize(+$any($event.target).value)">
+          <option [value]="5">5</option>
+          <option [value]="10">10</option>
+          <option [value]="25">25</option>
+          <option [value]="50">50</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead class="text-secondary small text-uppercase">
+          <tr>
+            <th class="ps-3" role="button" (click)="sortOn('name')">
+              Name
+              @if (sortBy() === 'name') { <i class="bi" [class.bi-caret-up-fill]="!sortDescending()" [class.bi-caret-down-fill]="sortDescending()"></i> }
+            </th>
+            <th>Email</th>
+            <th role="button" (click)="sortOn('age')">
+              Age
+              @if (sortBy() === 'age') { <i class="bi" [class.bi-caret-up-fill]="!sortDescending()" [class.bi-caret-down-fill]="sortDescending()"></i> }
+            </th>
+            <th role="button" (click)="sortOn('course')">
+              Course
+              @if (sortBy() === 'course') { <i class="bi" [class.bi-caret-up-fill]="!sortDescending()" [class.bi-caret-down-fill]="sortDescending()"></i> }
+            </th>
+            <th>Status</th>
+            <th role="button" (click)="sortOn('createddate')">
+              Joined
+              @if (sortBy() === 'createddate') { <i class="bi" [class.bi-caret-up-fill]="!sortDescending()" [class.bi-caret-down-fill]="sortDescending()"></i> }
+            </th>
+            <th class="text-end pe-3">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (loading()) {
+            <tr><td colspan="7" class="text-center py-5"><span class="spinner-border spinner-border-sm me-2"></span> Loading...</td></tr>
+          } @else if (students().length === 0) {
+            <tr><td colspan="7" class="text-center text-secondary py-5">
+              <i class="bi bi-inbox display-6 d-block mb-2"></i>
+              No students match the current filters.
+            </td></tr>
+          } @else {
+            @for (student of students(); track student.id) {
+              <tr>
+                <td class="ps-3 fw-semibold">{{ student.name }}</td>
+                <td>{{ student.email }}</td>
+                <td>{{ student.age }}</td>
+                <td>{{ student.course }}</td>
+                <td>
+                  @if (student.isActive) {
+                    <span class="badge bg-success-subtle text-success">Active</span>
+                  } @else {
+                    <span class="badge bg-secondary-subtle text-secondary">Inactive</span>
+                  }
+                </td>
+                <td class="text-secondary">{{ student.createdDate | date: 'mediumDate' }}</td>
+                <td class="text-end pe-3">
+                  <a [routerLink]="['/students', student.id, 'edit']" class="btn btn-sm btn-outline-primary me-2" title="Edit">
+                    <i class="bi bi-pencil"></i>
+                  </a>
+                  <button class="btn btn-sm btn-outline-danger" (click)="delete(student)" title="Delete">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+
+    @if (totalCount() > 0) {
+      <nav class="d-flex justify-content-end mt-3">
+        <ul class="pagination mb-0">
+          <li class="page-item" [class.disabled]="pageNumber() === 1">
+            <button class="page-link" (click)="goToPage(pageNumber() - 1)"><i class="bi bi-chevron-left"></i></button>
+          </li>
+          @for (page of pages(); track page) {
+            <li class="page-item" [class.active]="page === pageNumber()">
+              <button class="page-link" (click)="goToPage(page)">{{ page }}</button>
+            </li>
+          }
+          <li class="page-item" [class.disabled]="pageNumber() === totalPages()">
+            <button class="page-link" (click)="goToPage(pageNumber() + 1)"><i class="bi bi-chevron-right"></i></button>
+          </li>
+        </ul>
+      </nav>
+    }
+  </div>
+</div>

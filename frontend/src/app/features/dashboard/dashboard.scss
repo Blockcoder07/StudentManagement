@@ -1,0 +1,22 @@
+.sm-stat-card {
+  border-radius: 1rem;
+  transition: transform 150ms ease;
+}
+
+.sm-stat-card:hover {
+  transform: translateY(-2px);
+}
+
+.sm-stat-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.sm-action-card {
+  cursor: pointer;
+}

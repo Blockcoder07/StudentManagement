@@ -1,0 +1,29 @@
+## .NET / Visual Studio
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+*.user
+*.suo
+.vs/
+*.swp
+
+## Logs
+**/Logs/
+*.log
+
+## Angular / Node
+node_modules/
+dist/
+.angular/
+.cache/
+.nx/cache/
+npm-debug.log*
+
+## OS
+Thumbs.db
+.DS_Store
+
+## Editor
+.idea/
+*.code-workspace

@@ -1,0 +1,100 @@
+<div class="d-flex align-items-center justify-content-between mb-4">
+  <div>
+    <a routerLink="/students" class="text-secondary text-decoration-none small">
+      <i class="bi bi-chevron-left"></i> Back to students
+    </a>
+    <h1 class="h3 fw-bold mb-0 mt-2">{{ title() }}</h1>
+  </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+  <div class="card-body p-4">
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <div class="row g-4">
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Name <span class="text-danger">*</span></label>
+          <input
+            type="text"
+            class="form-control"
+            [class.is-invalid]="form.controls.name.invalid && form.controls.name.touched"
+            formControlName="name"
+            placeholder="e.g. Aarav Sharma" />
+          @if (form.controls.name.touched && form.controls.name.invalid) {
+            <div class="invalid-feedback">
+              @if (form.controls.name.errors?.['required']) { Name is required. }
+              @if (form.controls.name.errors?.['maxlength']) { Name must not exceed 100 characters. }
+              @if (form.controls.name.errors?.['pattern']) { Name can only contain letters, spaces, dots, apostrophes and hyphens. }
+            </div>
+          }
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Email <span class="text-danger">*</span></label>
+          <input
+            type="email"
+            class="form-control"
+            [class.is-invalid]="form.controls.email.invalid && form.controls.email.touched"
+            formControlName="email"
+            placeholder="name@example.com" />
+          @if (form.controls.email.touched && form.controls.email.invalid) {
+            <div class="invalid-feedback">
+              @if (form.controls.email.errors?.['required']) { Email is required. }
+              @if (form.controls.email.errors?.['email']) { Email is not in a valid format. }
+              @if (form.controls.email.errors?.['maxlength']) { Email is too long. }
+            </div>
+          }
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label fw-semibold">Age <span class="text-danger">*</span></label>
+          <input
+            type="number"
+            class="form-control"
+            [class.is-invalid]="form.controls.age.invalid && form.controls.age.touched"
+            formControlName="age"
+            min="5" max="120" />
+          @if (form.controls.age.touched && form.controls.age.invalid) {
+            <div class="invalid-feedback">
+              Age must be between 5 and 120.
+            </div>
+          }
+        </div>
+
+        <div class="col-md-9">
+          <label class="form-label fw-semibold">Course <span class="text-danger">*</span></label>
+          <input
+            type="text"
+            class="form-control"
+            [class.is-invalid]="form.controls.course.invalid && form.controls.course.touched"
+            formControlName="course"
+            placeholder="e.g. Computer Science" />
+          @if (form.controls.course.touched && form.controls.course.invalid) {
+            <div class="invalid-feedback">
+              Course is required and must be 100 characters or less.
+            </div>
+          }
+        </div>
+
+        @if (isEditMode()) {
+          <div class="col-12">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="isActive" formControlName="isActive" />
+              <label class="form-check-label" for="isActive">Active student</label>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="mt-4 d-flex justify-content-end gap-2">
+        <a routerLink="/students" class="btn btn-light">Cancel</a>
+        <button type="submit" class="btn btn-primary" [disabled]="submitting()">
+          @if (submitting()) {
+            <span class="spinner-border spinner-border-sm me-2"></span> Saving...
+          } @else {
+            <i class="bi bi-check-lg me-1"></i> {{ isEditMode() ? 'Update' : 'Create' }}
+          }
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
